@@ -1,0 +1,15 @@
+[
+  "company_name",
+  "job_desciption",
+  "title",
+  "salary",
+  "create_time",
+  "max_salary",
+  "min_salary",
+  "address",
+  "position_id",
+  "coordinate",
+  "educational",
+  "workyear"
+
+]
