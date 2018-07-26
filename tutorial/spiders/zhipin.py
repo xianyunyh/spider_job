@@ -14,7 +14,7 @@ class ZhipinSpider(scrapy.Spider):
 
     current_page = 20
     start_urls = [
-        "https://www.zhipin.com/mobile/jobs.json?city=101020100&query=PHP&page=20",
+        "https://www.zhipin.com/mobile/jobs.json?city=101020100&query=PHP&page=27",
     ]
     custom_settings = {
         "ITEM_PIPELINES":{
@@ -42,13 +42,13 @@ class ZhipinSpider(scrapy.Spider):
         for item in items:
             url = host + q(item).find('a').attr('href')
             position_name = q(item).find('a').text()
-            time.sleep(int(random.uniform(5, 10)))
+            time.sleep(int(random.uniform(50, 70)))
             yield Request(url,callback=self.parse_item,meta={'position_name':position_name})
 
         if self.current_page < 40:
             self.current_page += 1
             api_url = "https://www.zhipin.com/mobile/jobs.json?city=101020100&query=PHP"+"&page="+str(self.current_page)
-            time.sleep(int(random.uniform(5, 10)))
+            time.sleep(int(random.uniform(50, 70)))
             yield  Request(api_url,callback=self.parse)
         pass
 
@@ -62,5 +62,5 @@ class ZhipinSpider(scrapy.Spider):
         item['company_name']  = q('.business-info h4::text').extract_first()
         item['postion_id'] = response.url.split("/")[-1].split('.')[0]
         item['position_name'] = response.meta['position_name']
-        time.sleep(int(random.uniform(5, 10)))
+        time.sleep(int(random.uniform(50, 70)))
         yield  item
