@@ -16,4 +16,5 @@ class TutorialItem(scrapy.Item):
     body =scrapy.Field()
     company_name = scrapy.Field()
     postion_id = scrapy.Field()
+    position_name = scrapy.Field()
     pass
