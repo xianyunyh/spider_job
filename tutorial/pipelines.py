@@ -46,7 +46,7 @@ class TutorialPipeline(object):
     def process_item(self, item, spider):
         client = pymongo.MongoClient(host="127.0.0.1", port=27017)
         db = client['job']
-        collection =  db['position']
+        collection =  db['position2']
         collection.insert(dict(item))
         client.close()
         return item
@@ -59,8 +59,10 @@ class ZhipinPipeline(object):
         collection =  db['position']
         item['salary'] = clear_salary(item['salary'])
         item['create_time'] = clear_time(item['create_time'])
-        [item['position_name'], item['work_year'], item['educational']] = clear_position(item['position_name'])
-
+        [position_name, work_year, educational] = clear_position(item['position_name'])
+        item['position_name'] = position_name
+        item['work_year'] = work_year
+        item['educational'] =educational
         collection.insert(dict(item))
         client.close()
         return item

@@ -106,3 +106,5 @@ LAGOU_PC_HEADERS = {
     "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
     "Referer":"https://www.lagou.com/zhaopin/PHP/"
 }
+
+BOSS_COOKIE = "lastCity=101020100; Hm_lvt_194df3105ad7148dcf2b98a91b5e727a=1532661872,1532686206; Hm_lpvt_194df3105ad7148dcf2b98a91b5e727a=1532687462; __g=-; __l=%22r=https%3A%2F%2Fwww.zhipin.com%2F&l=%2Fc101020100-p100103%2F%22; __a=15569087.1532687461..1532687461.1.1.1.1"

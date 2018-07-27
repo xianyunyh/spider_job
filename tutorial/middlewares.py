@@ -60,10 +60,16 @@ class ProxyMiddleware(object):
 
     def process_request(self, request, spider):
 
-        request.meta['proxy'] = settings.get('HTTP_PROXY')
+        #request.meta['proxy'] = settings.get('HTTP_PROXY')
+        pass
 
 
 class LagouMiddleware(object):
 
     def process_request(self,request,spider):
         request.headers['cookie'] = settings.get('LAGOU_COOKIE')
+
+class ZhipinMiddleware(object):
+
+    def process_request(self,request,spider):
+        request.headers['cookie'] = settings.get('BOSS_COOKIE')
