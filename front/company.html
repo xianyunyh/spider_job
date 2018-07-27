@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+            <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+                <title>
+                    热门公司
+                </title>
+            </link>
+        </meta>
+    </head>
+    <body>
+        <header class="navbar navbar-inverse navbar-static-top bs-docs-nav" id="top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button aria-controls="bs-navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#bs-navbar" data-toggle="collapse" type="button">
+                        <span class="sr-only">
+                            Toggle navigation
+                        </span>
+                        <span class="icon-bar">
+                        </span>
+                        <span class="icon-bar">
+                        </span>
+                        <span class="icon-bar">
+                        </span>
+                    </button>
+                    <a class="navbar-brand" href="../">
+                        Logo
+                    </a>
+                </div>
+                <nav class="collapse navbar-collapse" id="bs-navbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="weekline.html">
+                                一周职位统计
+                            </a>
+                        </li>
+                        <li>
+                            <a href="workyear.html">
+                                工作年限统计
+                            </a>
+                        </li>
+                        <li>
+                            <a href="company.html">
+                                热门公司
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../getting-started/">
+                                菜单一
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <!-- 主题内容 -->
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>公司名字</th>
+                        <th>薪资范围</th>
+                        <th>发布次数</th>
+                        <th>职位链接地址</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
+        </div>
+        <!-- 主题结束 -->
+        <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js">
+        </script>
+        <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js">
+        </script>
+        <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.common.min.js"></script>
+        <script src="js/common.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            $.get(API_HOST+"company.php",function(data){
+                    var html = ""
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<tr><td>"+data[i]['company_name']+"</td>"
+                        html += "<td>"+data[i]['salary']['min']+"-"+data[i]['salary']['max']+"</td>"
+                        html += "<td>"+data[i]['count']+"</td>"
+                        html += "<td><a target='_blank' href='"+"https://www.zhipin.com/job_detail/"+data[i]['postion_id']+".html"+"'>职位详情</td>"
+                        html += '</tr>'
+
+                    }
+                    $("#tbody").append(html)
+            })
+        })
+        </script>
+    </body>
+</html>

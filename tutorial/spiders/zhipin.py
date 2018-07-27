@@ -22,12 +22,13 @@ class ZhipinSpider(scrapy.Spider):
         },
         "DOWNLOADER_MIDDLEWARES":{
             'tutorial.middlewares.ZhipinMiddleware': 299,
+            'tutorial.middlewares.ProxyMiddleware':301
         },
         "DEFAULT_REQUEST_HEADERS":{
             'Accept': 'application/json',
             'Accept-Language': 'zh-CN,zh;q=0.9',
             'User-Agent':'Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Mobile Safari/537.36',
-            'Referer':'https://www.zhipin.com/c101020100-p100103/?ka=position-100103',
+            'Referer':'https://www.zhipin.com/',
             'X-Requested-With':"XMLHttpRequest",
             "cookie":"lastCity=101020100; JSESSIONID=""; Hm_lvt_194df3105ad7148dcf2b98a91b5e727a=1532401467,1532435274,1532511047,1532534098; __c=1532534098; __g=-; __l=l=%2Fwww.zhipin.com%2F&r=; toUrl=https%3A%2F%2Fwww.zhipin.com%2Fc101020100-p100103%2F; Hm_lpvt_194df3105ad7148dcf2b98a91b5e727a=1532581213; __a=4090516.1532500938.1532516360.1532534098.11.3.7.11"
         }

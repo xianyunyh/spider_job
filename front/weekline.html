@@ -58,10 +58,11 @@
         var myChart = echarts.init(document.getElementById('main'));
         var option = {
             title: {
-                text: '职位趋势图'
+                text: '招聘网站七日内发布岗位数趋势'
             },
             tooltip: {
-                trigger: 'axis'
+                trigger: 'axis',
+                formatter: '{b0}发布{c0}个职位'
             },
             grid: {
                 left: '3%',
@@ -109,14 +110,6 @@
         }
         return option
     }
-
-        // 指定图表的配置项和数据
-
-
-
-
-        // 使用刚指定的配置项和数据显示图表。
-
     </script>
 </body>
 </html>

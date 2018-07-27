@@ -60,7 +60,7 @@ class ProxyMiddleware(object):
 
     def process_request(self, request, spider):
 
-        #request.meta['proxy'] = settings.get('HTTP_PROXY')
+        request.meta['proxy'] = settings.get('HTTP_PROXY')
         pass
 
 
