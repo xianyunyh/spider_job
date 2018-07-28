@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
             <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.css" rel="stylesheet">
                 <title>
                     热门公司
                 </title>
@@ -30,45 +31,38 @@
                 </div>
                 <nav class="collapse navbar-collapse" id="bs-navbar">
                     <ul class="nav navbar-nav">
-                        <li class="active">
+                        <li  >
                             <a href="weekline.html">
                                 一周职位统计
                             </a>
                         </li>
                         <li>
-                            <a href="workyear.html">
+                            <a class="active" href="workyear.html">
                                 工作年限统计
                             </a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="company.html">
-                                热门公司
+                                热门公司统计
+                            </a>
+                        </li>
+                        <li>
+                            <a href="education.html">
+                                学历分析
                             </a>
                         </li>
                         <li>
                             <a href="../getting-started/">
-                                菜单一
+                                词云图
                             </a>
                         </li>
-                    </ul>
                 </nav>
             </div>
         </header>
         <!-- 主题内容 -->
         <div class="container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>公司名字</th>
-                        <th>薪资范围</th>
-                        <th>发布次数</th>
-                        <th>职位链接地址</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody">
-
-                </tbody>
-            </table>
+            <h2 class="text-center">最近一周内招聘需求最多的前20家公司    </h2>
+            <table id="table"></table>
         </div>
         <!-- 主题结束 -->
         <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js">
@@ -78,20 +72,36 @@
         </script>
         <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.common.min.js"></script>
         <script src="js/common.js"></script>
+        <script src="https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
         <script type="text/javascript">
         $(function(){
-            $.get(API_HOST+"company.php",function(data){
-                    var html = ""
-                    for (var i = 0; i < data.length; i++) {
-                        html += "<tr><td>"+data[i]['company_name']+"</td>"
-                        html += "<td>"+data[i]['salary']['min']+"-"+data[i]['salary']['max']+"</td>"
-                        html += "<td>"+data[i]['count']+"</td>"
-                        html += "<td><a target='_blank' href='"+"https://www.zhipin.com/job_detail/"+data[i]['postion_id']+".html"+"'>职位详情</td>"
-                        html += '</tr>'
-
-                    }
-                    $("#tbody").append(html)
-            })
+            $('#table').bootstrapTable({
+            url: API_HOST+"company.php",
+            striped: true,
+            pageSize: 10,
+            pagination: true,
+            search: true,
+            columns: [{
+                field: 'company_name',
+                title: '公司名字'
+            }, {
+                field: 'salary',
+                title: '薪资范围',
+                 formatter : function (value, row, index) {
+                        return value.min + '-' + value.max;
+                }
+            }, {
+                field: 'count',
+                title: '发布次数'
+            },{
+                field: 'postion_id',
+                title: '职位链接',
+                formatter : function (value, row, index) {
+                    var link =  "https://www.zhipin.com/job_detail/"+value+".html";
+                    return "<a href='"+link+"'>查看详情</a>"
+                }
+            } ]
+        });
         })
         </script>
     </body>

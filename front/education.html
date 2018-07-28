@@ -35,8 +35,8 @@
                                 一周职位统计
                             </a>
                         </li>
-                        <li class="active">
-                            <a  href="workyear.html">
+                        <li>
+                            <a href="workyear.html">
                                 工作年限统计
                             </a>
                         </li>
@@ -45,7 +45,7 @@
                                 热门公司统计
                             </a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="education.html">
                                 学历分析
                             </a>
@@ -82,7 +82,7 @@
         // 指定图表的配置项和数据
         var salaryOption  = {
             title : {
-                text: '各阶段平均薪资比例',
+                text: '各学历平均阶段平均薪资情况',
                 subtext: '数据来源BOSS直聘',
                 x:'center'
             },
@@ -104,18 +104,7 @@
             series: [{
                 data: [],
                 type: 'bar',
-                itemStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#83bff6'},
-                            {offset: 0.5, color: '#188df0'},
-                            {offset: 1, color: '#188df0'}
-                        ]
-                    )
-                }
-            }
+
             }]
         };
 
@@ -128,7 +117,7 @@
                 },
                 series : [
                     {
-                        name: '工作年限',
+                        name: '学历',
                         type: 'pie',
                         radius : '55%',
                         center: ['50%', '60%'],
@@ -142,19 +131,19 @@
                         }
                     }],
             title : {
-                text: '基于招聘网站工作年限',
+                text: '基于招聘网站学历分析',
                 subtext: '数据来源BOSS直聘',
                 x:'center'
             },
             tooltip : {
                 trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                formatter: "{a} <br/>{b} : {c}个 ({d}%)"
             }
         };
 
         myChart.setOption(option);
         myChart.showLoading();
-        $.get('http://127.0.0.1:8090/workyear.php')
+        $.get('http://127.0.0.1:8090/education.php')
         .done(function (data) {
             myChart.hideLoading();
             result = deal_workyear(data)
@@ -175,9 +164,9 @@
             var series = []
             var salarySeries =[]
             data.forEach(function(item,index){
-                legend.push(item['work_year'])
+                legend.push(item['educational'])
                 var temp = {}
-                temp.name = item['work_year']
+                temp.name = item['educational']
                 temp.value = item['count']
                 series.push(temp)
                 salarySeries.push(item['salary'])

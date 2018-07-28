@@ -2,30 +2,27 @@
 require './vendor/autoload.php';
 header("Content-Type: application/json;charset=utf-8");
 header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-header('Access-Control-Allow-Methods: GET, POST, PUT,DELETE');
-
+header('Access-Control-Allow-Origin: *');
 $client = new MongoDB\Client("mongodb://127.0.0.1");
+
 $collection = $client->job->position;
 
 $cursor = $collection->aggregate(
     [
         ['$group' => [
-            '_id' => '$company_name',
+            '_id' => '$educational',
             'count' => ['$sum' => 1],
-            'postion_id' => ['$first' => '$postion_id'],
-            'salary' => ['$first' => '$salary'],
+            'salary' => ['$avg' => '$salary.avg'],
         ],
+
         ],
-        ['$sort' => ['count' => -1]],
-        ['$limit' => 20],
+        ['$sort' => ['salary' => 1]],
         ['$project' =>
             [
                 '_id' => 0,
-                "company_name" => '$_id',
+                "educational" => '$_id',
                 "count" => 1,
-                'postion_id' => 1,
-                'salary' => 1,
+                "salary" => 1,
             ],
         ],
     ]
