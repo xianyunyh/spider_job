@@ -6,7 +6,6 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
 import datetime
-import redis
 from scrapy.conf import settings
 
 def clear_salary(salary):
@@ -61,16 +60,6 @@ class ZhipinPipeline(object):
         collection =  db['position']
         item['salary'] = clear_salary(item['salary'])
         item['create_time'] = clear_time(item['create_time'])
-        [position_name, work_year, educational] = clear_position(item['position_name'])
-        item['position_name'] = position_name
-        item['work_year'] = work_year
-        item['educational'] =educational
-        #初始化redis
-        pool= redis.ConnectionPool(host='localhost',port=6379,decode_responses=True)
-        r=redis.Redis(connection_pool=pool)
-        key = settings.get('REDIS_POSITION_KEY')
-
-        if (r.sadd(key)) == 1:
-            collection.insert(dict(item))
+        collection.insert(dict(item))
         client.close()
         return item

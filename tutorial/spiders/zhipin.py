@@ -6,13 +6,17 @@ from pyquery import PyQuery as pq
 import  json
 import  time
 import  random
+import redis
+from scrapy.conf import settings
 
 #zhipin 爬虫
 class ZhipinSpider(scrapy.Spider):
+
     name = "boss"
     allowed_domains = ["www.zhipin.com"]
 
-    current_page = 1
+    current_page = 1 #开始页码
+    max_page = 4 #最大页码
     start_urls = [
         "https://www.zhipin.com/mobile/jobs.json?city=101020100&query=PHP",
     ]
@@ -42,11 +46,26 @@ class ZhipinSpider(scrapy.Spider):
         x = 1
         for item in items:
             url = host + q(item).find('a').attr('href')
-            position_name = q(item).find('a').text()
+            position_name = q(item).find('.title h4').text() #职位名称
+            salary = q(item).find('.salary').text() or  '' #薪资
+            work_year = q(item).find('.msg em').eq(1).text() or '不限' #工作年限
+            educational = q(item).find('.msg em').eq(2).text() #教育程度
+            meta = {
+                "position_name":position_name,
+                "salary":salary,
+                "work_year":work_year,
+                "educational":educational
+            }
             time.sleep(int(random.uniform(50, 70)))
-            yield Request(url,callback=self.parse_item,meta={'position_name':position_name})
+            #初始化redis
+            pool= redis.ConnectionPool(host='localhost',port=6379,decode_responses=True)
+            r=redis.Redis(connection_pool=pool)
+            key = settings.get('REDIS_POSITION_KEY')
+            position_id = url.split("/")[-1].split('.')[0]
+            if (r.sadd(key,position_id)) == 1:
+                yield Request(url,callback=self.parse_item,meta=meta)
 
-        if self.current_page < 4:
+        if self.current_page < self.max_page:
             self.current_page += 1
             api_url = "https://www.zhipin.com/mobile/jobs.json?city=101020100&query=PHP"+"&page="+str(self.current_page)
             time.sleep(int(random.uniform(50, 70)))
@@ -57,10 +76,9 @@ class ZhipinSpider(scrapy.Spider):
         item = TutorialItem()
         q = response.css
         item['address'] = q('.location-address::text').extract_first()
-        item['salary'] = q('.salary::text').extract_first()
         item['create_time'] = q('.job-tags .time::text').extract_first()
         item['body'] = q('.text').xpath('string(.)').extract_first()
         item['company_name']  = q('.business-info h4::text').extract_first()
         item['postion_id'] = response.url.split("/")[-1].split('.')[0]
-        item['position_name'] = response.meta['position_name']
+        item = dict(item, **response.meta )
         yield  item
