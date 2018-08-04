@@ -84,3 +84,34 @@ class ZhipinPipeline(object):
             collection.insert(dict(item))
         client.close()
         return item
+
+
+#处理51job数据
+class FiveJobPipeline(object):
+
+    def clear_salary(self,salary):
+        lists = salary.split("/")[0].split('-')
+        min,max = lists
+        result = {}
+        result['min'] = float(min)*10000
+        result['max'] = float(max.replace("万","")) *10000
+        result['avg'] = (result['max']+result['min'])/2
+        return result
+    def clear_address(self,address):
+        if "上班地址" in address:
+            address.replace("上班地址 :"," ")
+        return address
+    def clear_workyear(self,work_year):
+        if "工作经验" in work_year:
+            work_year.replace("工作经验"," ")
+        return work_year
+    def process_item(self, item, spider):
+        client = pymongo.MongoClient(host="127.0.0.1", port=27017)
+        db = client['job']
+        collection =  db['51job']
+        item['salary'] = self.clear_salary(salary=item['salary'])
+        item['address'] = self.clear_address(address=item['address'])
+        item['work_year'] = self.clear_address(address=item['work_year'])
+        collection.insert(dict(item))
+        client.close()
+        return item

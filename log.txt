@@ -1,9 +1,0 @@
-2018-07-29 16:21:41 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.zhipin.com/mobile/jobs.json?city=101020100&query=PHP>
-Traceback (most recent call last):
-  File "G:\soft\Anaconda3\lib\site-packages\twisted\internet\defer.py", line 1384, in _inlineCallbacks
-    result = result.throwExceptionIntoGenerator(g)
-  File "G:\soft\Anaconda3\lib\site-packages\twisted\python\failure.py", line 393, in throwExceptionIntoGenerator
-    return g.throw(self.type, self.value, self.tb)
-  File "G:\soft\Anaconda3\lib\site-packages\scrapy\core\downloader\middleware.py", line 43, in process_request
-    defer.returnValue((yield download_func(request=request,spider=spider)))
-twisted.internet.error.ConnectionRefusedError: Connection was refused by other side: 10061: 由于目标计算机积极拒绝，无法连接。.
