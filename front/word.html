@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport">
+            <meta charset="utf-8">
+                <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+                    <title>
+                        工作年限分析
+                    </title>
+                </link>
+            </meta>
+        </meta>
+    </head>
+    <body>
+        <header class="navbar navbar-inverse navbar-static-top bs-docs-nav" id="top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button aria-controls="bs-navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#bs-navbar" data-toggle="collapse" type="button">
+                        <span class="sr-only">
+                            Toggle navigation
+                        </span>
+                        <span class="icon-bar">
+                        </span>
+                        <span class="icon-bar">
+                        </span>
+                        <span class="icon-bar">
+                        </span>
+                    </button>
+                    <a class="navbar-brand" href="../">
+                        Logo
+                    </a>
+                </div>
+                <nav class="collapse navbar-collapse" id="bs-navbar">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="weekline.html">
+                                一周职位统计
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="workyear.html">
+                                工作年限统计
+                            </a>
+                        </li>
+                        <li>
+                            <a href="company.html">
+                                热门公司统计
+                            </a>
+                        </li>
+                        <li>
+                            <a href="education.html">
+                                学历分析
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../getting-started/">
+                                词云图
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <!-- 主题内容 -->
+        <div class="container">
+            <div id="main" style="width:100%;height:600px;">
+            </div>
+        </div>
+        <!-- 主题结束 -->
+        <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js">
+        </script>
+        <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js">
+        </script>
+        <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.common.min.js">
+        </script>
+        <script src="js/echarts-wordcloud.min.js">
+        </script>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            //
+        $(function(){
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+        series: [{
+            type: 'wordCloud',
+            gridSize: 2,
+            sizeRange: [22, 50],
+            rotationRange: [-90, 90],
+            shape: 'pentagon',
+            drawOutOfBound: true,
+            width:'100%',
+            height: 600,
+            // shape: 'pentagon',
+            textStyle: {
+                normal: {
+                    color: function () {
+                        return 'rgb(' + [
+                                Math.round(Math.random() * 255),
+                                Math.round(Math.random() * 255),
+                                Math.round(Math.random() * 255)
+                            ].join(',') + ')';
+                    }
+                },
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowColor: '#333'
+                }},
+            data: []
+        }]};
+        myChart.setOption(option);
+        myChart.showLoading();
+        $.get('http://127.0.0.1:8090/word.php')
+        .done(function (data) {
+            myChart.hideLoading();
+            result = deal_word(data)
+            console.log(result)
+            option.series[0].data = result
+            myChart.setOption(option);
+        });
+
+        myChart.setOption(option);
+
+        })
+    function deal_word(data){
+        var result  =[]
+        for(key in data) {
+            var tmp = {}
+            tmp.name = key
+            tmp.value = data[key]
+            result.push(tmp)
+        }
+        return result
+    }
+        </script>
+    </body>
+</html>
