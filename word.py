@@ -29,8 +29,9 @@ for x in cut_text:
             it_text[key.lower()] += 1
         else:
             it_text[key.lower()] = 1
+with open("word.json","w+",encoding="utf-8") as file:
+    data = file.write(json.dumps((it_text)))
 
-print(json.dumps((it_text)))
 
 result= "/".join(cut_text)#必须给个符号分隔开分词结果来形成字符串,否则不能绘制词云
 data = jieba.analyse.extract_tags(result.replace('/',''), withWeight=False, allowPOS=())
