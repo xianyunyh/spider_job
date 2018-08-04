@@ -37,7 +37,7 @@
                                 一周职位统计
                             </a>
                         </li>
-                        <li class="active">
+                        <li >
                             <a href="workyear.html">
                                 工作年限统计
                             </a>
@@ -52,8 +52,8 @@
                                 学历分析
                             </a>
                         </li>
-                        <li>
-                            <a href="word.html">
+                        <li class="active">
+                            <a   href="word.html">
                                 词云图
                             </a>
                         </li>
@@ -67,9 +67,9 @@
             </div>
         </div>
         <div class="container">
-            <code>
+            <p>
                 该技术词语是从招聘职位描述中提取出来的关键字。关键字一般都是英文的。中间出现中文的关键词不计算。如html5.css3不计算在内。关键词则全部处理成小写。如PHP，则处理成php。
-            </code>
+            </p>
         </div>
         <!-- 主题结束 -->
         <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js">
@@ -87,18 +87,22 @@
         $(function(){
         var myChart = echarts.init(document.getElementById('main'));
         var option = {
+             title: {
+        text: '技术 词云图',
+        link: ''
+    },
         series: [{
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c}个 ({d}%)"
+            tooltip: {
+                show: true
             },
             type: 'wordCloud',
-            gridSize: 2,
+            gridSize: 8,
             sizeRange: [22, 50],
             rotationRange: [-90, 90],
-            shape: 'pentagon',
-            drawOutOfBound: true,
+            shape: 'circle',
+            drawOutOfBound: false,
             width:'100%',
+            textPadding: 10,
             height: 600,
             textStyle: {
                 normal: {
@@ -115,10 +119,6 @@
                     shadowColor: '#333'
                 }},
             data: [],
-                                  emphasis: {
-                            shadowBlur: 10,
-                            shadowColor: '#333'
-                        }
         }]};
         myChart.setOption(option);
         myChart.showLoading();
@@ -126,13 +126,12 @@
         .done(function (data) {
             myChart.hideLoading();
             result = deal_word(data)
-            console.log(result)
             option.series[0].data = result
             myChart.setOption(option);
         });
 
         myChart.setOption(option);
-        window.onresize = chart.resize;
+        window.onresize = myChart.resize;
         })
     function deal_word(data){
         var result  =[]
