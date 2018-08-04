@@ -50,4 +50,5 @@ class FiveJobSpider(scrapy.Spider):
         item['position_name'] = q('.jt p::text').extract_first()
         item['work_year'] = q('.jd .s_n::text').extract_first() or "不限"
         item['educational']  = q('.jd .s_x::text').extract_first() or "不限"
+        print(item['postion_id'])
         yield  item

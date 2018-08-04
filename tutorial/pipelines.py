@@ -92,18 +92,24 @@ class FiveJobPipeline(object):
     def clear_salary(self,salary):
         lists = salary.split("/")[0].split('-')
         min,max = lists
+        unit = 10000
+        if "千" in max:
+            unit = 1000
+            max = max.replace("千","")
+        else:
+            max = max.replace("万","")
         result = {}
-        result['min'] = float(min)*10000
-        result['max'] = float(max.replace("万","")) *10000
+        result['min'] = float(min)*unit
+        result['max'] = float(max)*unit
         result['avg'] = (result['max']+result['min'])/2
         return result
     def clear_address(self,address):
         if "上班地址" in address:
-            address.replace("上班地址 :"," ")
+            address = address.replace("上班地址 :"," ")
         return address
     def clear_workyear(self,work_year):
         if "工作经验" in work_year:
-            work_year.replace("工作经验"," ")
+           work_year =  work_year.replace("工作经验"," ")
         return work_year
     def process_item(self, item, spider):
         client = pymongo.MongoClient(host="127.0.0.1", port=27017)
@@ -111,7 +117,7 @@ class FiveJobPipeline(object):
         collection =  db['51job']
         item['salary'] = self.clear_salary(salary=item['salary'])
         item['address'] = self.clear_address(address=item['address'])
-        item['work_year'] = self.clear_address(address=item['work_year'])
+        item['work_year'] = self.clear_workyear(work_year=item['work_year'])
         collection.insert(dict(item))
         client.close()
         return item
