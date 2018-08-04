@@ -98,6 +98,7 @@ class FiveJobPipeline(object):
             max = max.replace("千","")
         else:
             max = max.replace("万","")
+        print(max)
         result = {}
         result['min'] = float(min)*unit
         result['max'] = float(max)*unit
@@ -108,8 +109,8 @@ class FiveJobPipeline(object):
             address = address.replace("上班地址 :"," ")
         return address
     def clear_workyear(self,work_year):
-        if "工作经验" in work_year:
-           work_year =  work_year.replace("工作经验"," ")
+        if "经验" in work_year:
+           work_year =  work_year.replace("工作经验"," ") or work_year.replace("经验"," ")
         return work_year
     def process_item(self, item, spider):
         client = pymongo.MongoClient(host="127.0.0.1", port=27017)
