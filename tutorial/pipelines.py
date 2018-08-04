@@ -8,6 +8,18 @@ import pymongo
 import datetime
 from scrapy.conf import settings
 
+# 学历列表
+educations = ("不限","大专","本科","硕士","博士")
+#修正学历 有些职位中的学历明显不一致。需要修正
+def clean_education(edu,body):
+    if edu not in educations:
+        for i in educations:
+            if i in body:
+                edu = i
+            else:
+                edu = '不限'
+    return edu
+
 def clear_salary(salary):
     res = salary.split("-")
     temp = []
@@ -20,7 +32,6 @@ def clear_salary(salary):
         "avg":int((temp[0]+temp[1])/2)
     }
     return result
-
 
 def clear_time(time):
     now_year = datetime.datetime.now().year
@@ -42,6 +53,13 @@ def clear_position(name):
     educational = data[-1]
     return name,work_year,educational
 
+#判断PHP是否在职位名称中，不在就过滤掉。
+#jd中含有php不参考，因为很多jd中都乱写
+def clean_name(name):
+    if "PHP" not in name.upper():
+        return False
+    return True
+
 
 class TutorialPipeline(object):
     def process_item(self, item, spider):
@@ -60,6 +78,9 @@ class ZhipinPipeline(object):
         collection =  db['position']
         item['salary'] = clear_salary(item['salary'])
         item['create_time'] = clear_time(item['create_time'])
-        collection.insert(dict(item))
+        item['educational'] = clean_education(item['educational'],item['body'])
+        is_php = clean_name(item['position_name'])
+        if is_php is True:
+            collection.insert(dict(item))
         client.close()
         return item

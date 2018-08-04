@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta charset="utf-8">
             <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
                 <title>
@@ -143,7 +144,7 @@
 
         myChart.setOption(option);
         myChart.showLoading();
-        $.get('http://127.0.0.1:8090/education.php')
+        $.get('http://yehe.37he.cn/api/education.php')
         .done(function (data) {
             myChart.hideLoading();
             result = deal_workyear(data)
