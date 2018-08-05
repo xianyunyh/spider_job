@@ -14,7 +14,7 @@
                         <span class="icon-bar">
                         </span>
                     </button>
-                    <a class="navbar-brand" href="../">
+                    <a class="navbar-brand" href="">
                         Logo
                     </a>
                 </div>
@@ -28,7 +28,7 @@
                             <router-link :to="{ name: 'workyear'}">工作年限统计</router-link>
                            
                         </li>
-                        <li class="active">
+                        <li>
                            <router-link :to="{ name: 'hot'}">热门公司统计</router-link>
                         </li>
                         <li>
