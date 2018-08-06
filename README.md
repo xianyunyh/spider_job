@@ -40,3 +40,13 @@
   composer require mongodb/mongodb
   ```
 
+
+
+运行爬虫
+
+```bash
+scrapy crawl boss #抓boss
+scrapy crawl 51job #抓51job
+scrapy crawl lagou #拉钩
+```
+
