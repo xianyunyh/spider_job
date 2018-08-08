@@ -2,7 +2,7 @@ import scrapy
 from tutorial.items import TutorialItem
 from scrapy.http import Request
 from scrapy.spiders import CrawlSpider
-from pyquery import PyQuery as pq
+from scrapy.selector import Selector
 import  json
 import  time
 import  random
@@ -26,7 +26,7 @@ class ZhipinSpider(scrapy.Spider):
         },
         "DOWNLOADER_MIDDLEWARES":{
             'tutorial.middlewares.ZhipinMiddleware': 299,
-            'tutorial.middlewares.ProxyMiddleware':301
+         #   'tutorial.middlewares.ProxyMiddleware':301
         },
         "DEFAULT_REQUEST_HEADERS":{
             'Accept': 'application/json',
@@ -40,22 +40,28 @@ class ZhipinSpider(scrapy.Spider):
     def parse(self, response):
         js = json.loads(response.body)
         html = js['html']
-        q = pq(html)
-        items = q(".item")
+
+        q = Selector(text=html)
+
+
+        items = q.css(".item")
+
         host = 'https://www.zhipin.com'
         x = 1
         for item in items:
-            url = host + q(item).find('a').attr('href')
-            position_name = q(item).find('.title h4').text() #职位名称
-            salary = q(item).find('.salary').text() or  '' #薪资
-            work_year = q(item).find('.msg em').eq(1).text() or '不限' #工作年限
-            educational = q(item).find('.msg em').eq(2).text() #教育程度
+            url = host + item.xpath('//a/@href').extract_first()
+
+            position_name = item.css('h4::text').extract_first() #职位名称
+            salary = item.css('.salary::text').extract_first() or  '' #薪资
+            work_year = item.css('.msg em:nth-child(2)::text').extract_first() or '不限' #工作年限
+            educational = item.css('.msg em:nth-child(3)::text').extract_first() #教育程度
             meta = {
                 "position_name":position_name,
                 "salary":salary,
                 "work_year":work_year,
                 "educational":educational
             }
+
             time.sleep(int(random.uniform(50, 70)))
             #初始化redis
             pool= redis.ConnectionPool(host='localhost',port=6379,decode_responses=True)
