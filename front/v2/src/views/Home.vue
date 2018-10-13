@@ -1,28 +1,38 @@
+
 <template>
-  <div>
-    <ve-histogram :data="chartData"></ve-histogram>
-    <ve-pie :data="chartData"></ve-pie>
-  </div>
+<div class="container">
+  <h2 class="text-center">每月发布职位趋势图</h2>
+<ve-histogram :data="chartData" :settings="chartSettings"></ve-histogram>
+<ve-line :data="chartData" :settings="chartSettings"></ve-line>
+</div>
+  
 </template>
 
 <script>
+import { get_month_line } from "@/service/api";
 import VeHistogram from "v-charts/lib/histogram.common";
-import VePie from "v-charts/lib/pie.common";
+import VeLine from "v-charts/lib/line.common";
 export default {
-  components: { VeHistogram,VePie },
+  components: { VeHistogram,VeLine },
   data () {
     return {
-      chartData: {
-        columns: ['日期', '销售量'],
-        rows: [
-          { '日期': '1月1日', '销售量': 123 },
-          { '日期': '1月2日', '销售量': 1223 },
-          { '日期': '1月3日', '销售量': 2123 },
-          { '日期': '1月4日', '销售量': 4123 },
-          { '日期': '1月5日', '销售量': 3123 },
-          { '日期': '1月6日', '销售量': 7123 }
-        ]
-      }
+      chartSettings:{
+        labelMap: {
+          date: "月份",
+          count: "发布次数"
+        }
+    },
+    chartData: {}
+    }
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    async init() {
+      let rows = await get_month_line();
+      let columns = Object.keys(this.chartSettings["labelMap"]);
+      this.chartData = { columns, rows };
     }
   }
 }

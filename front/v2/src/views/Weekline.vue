@@ -1,5 +1,6 @@
 <template>
 <div class="container">
+  <h2 class="text-center">最近一周职位发布趋势图</h2>
 <ve-line :data="chartData" :settings="chartSettings"></ve-line>
 </div>
 </template>

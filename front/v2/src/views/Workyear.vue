@@ -1,5 +1,6 @@
 <template lang="">
     <div class="container">
+        <h2 class="text-center">工作年限和薪资分析</h2>
          <ve-pie :data="chartData" :settings="pieSettings" :colors="colors"></ve-pie>
          <ve-histogram :data="salaryData"  :settings="salarySettings"></ve-histogram>
     </div>

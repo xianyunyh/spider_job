@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h2 class="text-center">学历和薪资分析图</h2>
         <ve-pie :title="chartTitle" :data="chartData"></ve-pie>
         <ve-histogram :title="salartTitle" :data="salaryData" :settings="salarySettings"></ve-histogram>
     
