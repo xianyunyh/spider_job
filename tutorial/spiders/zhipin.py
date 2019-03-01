@@ -39,8 +39,9 @@ class ZhipinSpider(scrapy.Spider):
     }
     def parse(self, response):
         js = json.loads(response.body)
+        
         html = js['html']
-
+print(html)
         q = Selector(text=html)
 
 

@@ -49,4 +49,10 @@ scrapy crawl boss #抓boss
 scrapy crawl 51job #抓51job
 scrapy crawl lagou #拉钩
 ```
+## 其他问题
+
+ 1. 出现`Get it with Microsoft Visual C++ Build Tools: http://landinghub.visualstudio.com/visual-cpp-build-tools`
+
+请到[https://www.lfd.uci.edu/~gohlke/pythonlibs/](https://www.lfd.uci.edu/~gohlke/pythonlibs/) 下载对应的whl文件 然后执行 pip install xxxx.whl
+
 
