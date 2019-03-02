@@ -3,6 +3,9 @@
 
 数据来源为拉钩和直聘网。
 项目基于scrapy框架进行爬虫，使用mongodb存储爬取数据。
+前端界面使用`vue`编写,后端接口为 php
+
+在线预览地址: [Demo](http://yehe.37he.cn/job/)
 
 - 项目目录结构图
 
@@ -30,29 +33,32 @@
 
 ## 安装
 
+```shell
+pip install -f requirements.txt
+```
 - 请安装mongodb、redis
 
 - python 请选用3.6+以上的版本。需要的依赖有 pymongo、scrapy、redis、pyquery(后期可能会移除)
 
-- php请安装pecl [mogodb拓展](http://pecl.php.net/package/mongodb)！依赖 [mongodb/mongodb](https://packagist.org/packages/mongodb/mongodb)
+- php请安装 [mogodb拓展](http://pecl.php.net/package/mongodb) 并且依赖 [mongodb/mongodb](https://packagist.org/packages/mongodb/mongodb)
 
-  ```
+  ```shell
   composer require mongodb/mongodb
   ```
 
 
 
-运行爬虫
+### 运行爬虫
 
 ```bash
 scrapy crawl boss #抓boss
 scrapy crawl 51job #抓51job
 scrapy crawl lagou #拉钩
 ```
-## 其他问题
+## windows下其他问题
 
  1. 出现`Get it with Microsoft Visual C++ Build Tools: http://landinghub.visualstudio.com/visual-cpp-build-tools`
 
-请到[https://www.lfd.uci.edu/~gohlke/pythonlibs/](https://www.lfd.uci.edu/~gohlke/pythonlibs/) 下载对应的whl文件 然后执行 pip install xxxx.whl
+请到[https://www.lfd.uci.edu/~gohlke/pythonlibs/](https://www.lfd.uci.edu/~gohlke/pythonlibs/) 下载对应的whl文件 然后执行 `pip install xxxx.whl`
 
 
