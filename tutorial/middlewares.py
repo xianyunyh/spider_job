@@ -72,4 +72,5 @@ class LagouMiddleware(object):
 class ZhipinMiddleware(object):
 
     def process_request(self,request,spider):
-        request.headers['cookie'] = settings.get('BOSS_COOKIE')
+        pass
+        # request.headers['cookie'] = settings.get('BOSS_COOKIE')
