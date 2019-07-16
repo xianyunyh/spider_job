@@ -10,6 +10,7 @@
   "dependencies": {
     "echarts": "^4.1.0",
     "flyio": "^0.6.0",
+    "lodash": "^4.17.13",
     "v-charts": "^1.17.9",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
