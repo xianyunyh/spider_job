@@ -15,4 +15,15 @@
 
 ```shell
 composer require mongodb/mongodb
+composer dumpautload
+```
+## 使用
+```php
+$config = [
+    "uri"=>"mongodb://127.0.0.1",
+    "db"=>"job",
+    "collection"=>"postion",
+]
+$store = new Boss\Store($config);
+
 ```
