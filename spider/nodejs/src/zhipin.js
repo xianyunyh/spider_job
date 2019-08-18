@@ -130,15 +130,7 @@ async function gotoDetail(page, url) {
             results.push(res)
             await page.waitFor(2000);
         }
-        axios.post('http://dev.55haitao.com/addJob.php', results)
-             .then(function (response) {
-                 //console.log(response);
-		    console.log(response.statusText);
-             })
-             .catch(function (error) {
-                //console.log('Error', error.message); 
-		//console.log(error);
-             });
+    
         console.log("total:", results.length)
         await browser.close();
     } catch (e) {
