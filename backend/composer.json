@@ -12,7 +12,7 @@
     },
     "autoload": {
         "files": [
-            "src/Store.php"
+            "src/Job.php"
         ],
       "psr-4":{
         "Boss\\":"src/"

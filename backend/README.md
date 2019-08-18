@@ -23,7 +23,7 @@ $config = [
     "uri"=>"mongodb://127.0.0.1",
     "db"=>"job",
     "collection"=>"postion",
-]
+];
 $store = new Boss\Store($config);
 
 ```

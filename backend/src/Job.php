@@ -2,28 +2,33 @@
 
 namespace Boss;
 
-class Store
+use \DateTimeImmutable;
+use Exception;
+use MongoDB;
+
+class Job
 {
     /**
      * @var \MongoDB\Collection
      */
     private $collection;
 
+    /**
+     * Job constructor.
+     * @param array $config
+     * @throws Exception
+     */
     public function __construct(array $config = [])
     {
-        try {
-            $uri    = $config["uri"] ?? "mongodb://127.0.0.1";
-            $client = new MongoDB\Client($uri);
-            if (!isset($config['db']) || empty($config['db'])) {
-                throw new Exception("没设置db");
-            }
-            if (!isset($config['collection']) || empty($config['collection'])) {
-                throw new Exception("没设置collection");
-            }
-            $this->collection = $client->{$config['db']}->{$config['collection']};
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage());
+        $uri = $config["uri"] ?? "mongodb://127.0.0.1";
+        $client = new MongoDB\Client($uri);
+        if (!isset($config['db']) || empty($config['db'])) {
+            throw new Exception("没设置db");
         }
+        if (!isset($config['collection']) || empty($config['collection'])) {
+            throw new Exception("没设置collection");
+        }
+        $this->collection = $client->{$config['db']}->{$config['collection']};
     }
 
     /**
@@ -34,14 +39,14 @@ class Store
     {
         $cursor = $this->collection->aggregate(
             [
+                ['$match' => ['create_time' => ['$gte' => $startDate->format("Y-m-d"), '$lte' => $end->format("Y-m-d")]]],
                 ['$group' => [
                     '_id' => '$company_name',
                     'count' => ['$sum' => 1],
                     'postion_id' => ['$first' => '$postion_id'],
                     'salary' => ['$first' => '$salary'],
-                ],
-                ],
-                ['$match' => ['create_time' => ['$gte' => $startDate->format("Y-m-d"), '$lte' => $end->format("Y-m-d")]]],
+                ]],
+
                 ['$sort' => ['count' => -1]],
                 ['$limit' => 20],
                 ['$project' =>
@@ -55,7 +60,7 @@ class Store
                 ],
             ]
         );
-        return iterator_to_array($cursor, true);
+        return $this->iterator2array($cursor);
     }
 
     /**
@@ -65,6 +70,11 @@ class Store
     {
         $cursor = $this->collection->aggregate(
             [
+                ['$match' => [
+                    'create_time' => [
+                        '$gte' => $startDate->format("Y-m-d"),
+                        '$lte' => $endDate->format("Y-m-d")]]
+                ],
                 ['$group' => [
                     '_id' => '$work_year',
                     'count' => ['$sum' => 1],
@@ -72,11 +82,7 @@ class Store
                 ],
                 ],
                 ['$sort' => ['salary' => 1]],
-                ['$match' => [
-                    'create_time' => [
-                        '$gte' => $startDate->format("Y-m-d"),
-                        '$lte' => $endDate->format("Y-m-d")]]
-                ],
+
                 ['$project' =>
                     [
                         '_id' => 0,
@@ -87,7 +93,7 @@ class Store
                 ],
             ]
         );
-        return iterator_to_array($cursor, true);
+        return $this->iterator2array($cursor);
     }
 
     /**
@@ -98,6 +104,11 @@ class Store
     {
         $cursor = $this->collection->aggregate(
             [
+                ['$match' => [
+                    'create_time' => [
+                        '$gte' => $startDate->format("Y-m-d"),
+                        '$lte' => $endDate->format("Y-m-d")]]
+                ],
                 ['$group' => [
                     '_id' => '$educational',
                     'count' => ['$sum' => 1],
@@ -105,11 +116,6 @@ class Store
                 ],
                 ],
                 ['$sort' => ['salary' => 1]],
-                ['$match' => [
-                    'create_time' => [
-                        '$gte' => $startDate->format("Y-m-d"),
-                        '$lte' => $endDate->format("Y-m-d")]]
-                ],
                 ['$project' =>
                     [
                         '_id' => 0,
@@ -120,7 +126,8 @@ class Store
                 ],
             ]
         );
-        return iterator_to_array($cursor, true);
+
+        return $this->iterator2array($cursor);
     }
 
     /**
@@ -157,7 +164,17 @@ class Store
                 ['$project' => ['_id' => 0, "date" => '$_id', "count" => 1]],
             ]
         );
-        return iterator_to_array($cursor);
+        return  $this->iterator2array($cursor);
+
+    }
+
+    private function iterator2array(\Traversable $cursor)
+    {
+        $data = [];
+        foreach ($cursor as $item) {
+            array_push($data,$item);
+        }
+        return $data;
 
     }
 
