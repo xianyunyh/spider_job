@@ -42,6 +42,12 @@ async function getElementText(page, selector) {
         return "";
     }
 }
+function getIdByUrl(url) {
+    let uParse = new Url(url)
+    let path = uParse.pathname
+    pathArr = path.split("/")
+    return pathArr[pathArr.length - 1].replace(".html", "")
+}
 
 function parseSalary(salary) {
     let temp = {
@@ -87,11 +93,36 @@ async function gotoDetail(page, url) {
         let vline = await page.$eval("#main > div.job-banner > p", e => e.innerHTML)
         let vlineArr = vline.split(`<em class="vline"></em>`)
         let work_year = vlineArr[1]
+        if (work_year.indexOf("年") == -1) {
+            work_year = "不限"
+        }
+        
         let educational = vlineArr[vlineArr.length - 1]
         salary = parseSalary(salary)
         let company_name = await getElementText(page, ".business-info h4")
         let body = await page.$$eval(".job-sec .text", e => e.map(l => l.textContent).join("\n"))
         let address = await getElementText(page, ".location-address")
+        let gray = await page.$eval(".job-company .gray", e => e.innerHTML)
+        let grayArr =  gray.split(`<em class="vline"></em>`)
+        let company_url = await page.$eval(".link-all",a=>a.href)
+        let company_scale = grayArr[2] || ""
+        let company_stage =  grayArr[1] || ""
+        let company_area = grayArr[0] || ""
+        let map = await page.evaluate(()=>{
+            let long_lat = document.getElementById('map-container').getAttribute("data-long-lat");
+            return long_lat
+        });
+        map = map.split(",")
+        let company_info = {
+            company_id:getIdByUrl(company_url),
+            company_name:company_name.replace(/\s+/g,""),
+            company_scale:company_scale.replace(/\s+/g,""),//公司规模
+            company_stage:company_stage.replace(/\s+/g,""), //发展阶段
+            company_area: company_area.replace(/\s+/g,""),//公司领域
+            company_site:company_url,//公司网站
+            position_lng: map[0],
+            position_lat: map[1],
+        }
         return {
             address,
             salary,
@@ -102,6 +133,7 @@ async function gotoDetail(page, url) {
             position_name,
             educational,
             work_year,
+            company_info
         }
 
     } catch (error) {
@@ -127,11 +159,9 @@ async function gotoDetail(page, url) {
             if (res == false) {
                 continue;
             }
-            console.log(res)
             results.push(res)
             await page.waitFor(2000);
         }
-    
         console.log("total:", results.length)
         await browser.close();
     } catch (e) {

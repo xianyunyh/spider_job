@@ -149,7 +149,7 @@ async function gotoDetail(page, url) {
         let address = await getElementText(page, ".work_addr")
         let company_url = await page.$eval("#job_company > dt > a",a=>a.href)
         let company_scale = await getElementText(page,"#job_company > dd > ul > li:nth-last-child(2)  h4")
-         let company_stage =  await getElementText(page,"#job_company > dd > ul > li:nth-child(2)  h4")
+        let company_stage =  await getElementText(page,"#job_company > dd > ul > li:nth-child(2)  h4")
         let company_area = await getElementText(page,"#job_company > dd > ul > li:nth-child(1)  h4")
         let company_site = await page.$eval("#job_company > dd > ul > li:nth-last-child(1)  a",a=>a.href)
         let company_info = {
