@@ -87,7 +87,7 @@ async function gotoDetail(page, url) {
         let vline = await page.$eval("#main > div.job-banner > p", e => e.innerHTML)
         let vlineArr = vline.split(`<em class="vline"></em>`)
         let work_year = vlineArr[1]
-        let educational = vlineArr[vlineArr.lenght - 1]
+        let educational = vlineArr[vlineArr.length - 1]
         salary = parseSalary(salary)
         let company_name = await getElementText(page, ".business-info h4")
         let body = await page.$$eval(".job-sec .text", e => e.map(l => l.textContent).join("\n"))
@@ -127,6 +127,7 @@ async function gotoDetail(page, url) {
             if (res == false) {
                 continue;
             }
+            console.log(res)
             results.push(res)
             await page.waitFor(2000);
         }
