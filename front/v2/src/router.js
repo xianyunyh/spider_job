@@ -16,28 +16,34 @@ export default new Router({
     {
       path: '/hot-company',
       name: 'hot',
-      component: () => import(/* webpackChunkName: "about" */ './views/HotCompany.vue')
+      component: () => import(/* webpackChunkName: "index" */ './views/HotCompany.vue')
+    },
+    {
+      path: '/map',
+      name: 'company-map',
+      component: () => import(/* webpackChunkName: "index" */ './views/CompanyMap.vue')
     },
     {
       path: '/workyear',
       name: 'workyear',
-      component: () => import(/* webpackChunkName: "about" */ './views/Workyear.vue')
+      component: () => import(/* webpackChunkName: "index" */ './views/Workyear.vue')
     },
     {
       path: '/weekline',
       name: 'weekline',
-      component: () => import(/* webpackChunkName: "about" */ './views/Weekline.vue')
+      component: () => import(/* webpackChunkName: "index" */ './views/Weekline.vue')
     },
     {
       path: '/education',
       name: 'education',
-      component: () => import(/* webpackChunkName: "about" */ './views/Education.vue')
+      component: () => import(/* webpackChunkName: "index" */ './views/Education.vue')
     },
     {
       path: '/wordcloud',
       name: 'wordcloud',
       component: () => import(/* webpackChunkName: "about" */ './views/Word.vue')
     },
+    
 
   ]
 })

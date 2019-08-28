@@ -1,3 +1,8 @@
 module.exports = {
-  baseUrl: '/job/'
-}
+  publicPath: '/job/',
+  configureWebpack:{
+    externals: {
+  
+    }
+  },
+};

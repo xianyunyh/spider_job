@@ -28,6 +28,10 @@
                             <router-link :to="{ name: 'workyear'}">工作年限统计</router-link>
                            
                         </li>
+                         <li>
+                            <router-link :to="{ name: 'company-map'}">地图</router-link>
+                           
+                        </li>
                         <li>
                            <router-link :to="{ name: 'hot'}">热门公司统计</router-link>
                         </li>

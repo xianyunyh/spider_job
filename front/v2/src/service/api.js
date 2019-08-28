@@ -7,3 +7,4 @@ export const get_education =  (data) => request.get(base_url + 'education.php',d
 export const get_wordcloud =  (data) => request.get(base_url + 'word.json',data)
 export const get_hot_compay = (data) => request.get(base_url + 'company.php',data)
 export const get_month_line = (data) => request.get(base_url + 'monthline.php',data)
+export const get_company_map = (data) => request.get(base_url + "map.php",data) 
