@@ -5,6 +5,8 @@ import (
 	"app/models"
 	"github.com/gin-gonic/gin"
 	"log"
+	"strconv"
+	"app/handler"
 )
 
 func main()  {
@@ -14,13 +16,17 @@ func main()  {
 		log.Fatal(err)
 	}
 	models.Init()
-	log.Println()
-	r := gin.Default()
-	Router(r)
-	r.GET("/ping", func(c *gin.Context) {
+	gin.SetMode(gin.ReleaseMode)
+	router := gin.Default()
+	router.Any("/", handler.Index)
+	router.GET("/company",handler.CompanyList)
+	router.GET("/company/analysis",handler.CompanyAnaly)
+	router.GET("/position/weekly",handler.WeeklyData)
+	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
-	log.Fatal(r.Run())
+	log.Println(config.Conf.Port)
+	router.Run(config.Conf.Ip + ":"+strconv.Itoa(config.Conf.Port))
 }
