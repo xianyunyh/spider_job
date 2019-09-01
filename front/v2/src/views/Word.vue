@@ -1,43 +1,49 @@
 <template>
-
-<div class="container">
-  <div id="main">
-    <wordcloud style="height:600px"
-      :data="words"
-      nameKey="name"
-      valueKey="value">
-      </wordcloud>
+  <div class="container">
+    <div id="main">
+      <wordcloud style ="height:600px" :data="chartData.rows" nameKey="word" valueKey="count"></wordcloud>
+    </div>
   </div>
-</div>    
 </template>
-
 <style>
 </style>
 
 <script>
-import {get_wordcloud} from '@/service/api'
-
+import { get_wordcloud } from "@/service/api";
 import wordcloud from 'vue-wordcloud'
 export default {
   components: {
-    wordcloud
+    wordcloud,
   },
   data() {
+    this.chartSettings = {
+        shape: 'circle',
+        left:"left",
+        sizeMin: 16,
+        sizeMax: 100,
+        rotationRange: [-90, 90],
+        gridSize:100,
+        width:"100%",
+        height:"800px",
+      }
     return {
-      words: []
+      chartData: {
+        columns: ["word", "count"],
+        rows: [
+        ]
+      }
+    };
+  },
+  async created() {
+    let res = await get_wordcloud();
+    let data = [];
+    for (let t in res) {
+      let tmp = {};
+      tmp.word = t;
+      tmp.count = res[t];
+      data.push(tmp);
     }
-  },
-   async created() {
-
-     let res = await get_wordcloud()
-     let data = []
-     for (let t in res) {
-       let tmp = {}
-       tmp.name = t
-       tmp.value = res[t]
-       data.push(tmp)
-     }
-     this.words = data
-  },
+    this.chartData.rows   =  data;
+  }
 };
 </script>

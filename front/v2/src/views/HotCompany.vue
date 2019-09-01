@@ -14,7 +14,7 @@
           <td>{{item.company_name}}</td>
           <td>{{item.count}}</td>
           <td>{{item.salary.min}}-{{item.salary.max}}</td>
-          <td><a :href="'http://www.zhipin.com/job/'+item.postion_id + '.html'">查看介绍</a></td>
+          <td><a target="_blank" :href="'http://www.zhipin.com/gongsi/'+item.company_id + '.html'">查看介绍</a></td>
         </tr>
        
       </tbody>
