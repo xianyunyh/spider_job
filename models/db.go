@@ -20,9 +20,9 @@ var Db 	  *mongo.Database
 func Init() {
 	var once sync.Once
 	once.Do(func() {
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		if client, err := mongo.Connect(ctx, options.Client().ApplyURI(config.Conf.MgoUri)); err == nil {
+		if client, err := mongo.Connect(ctx, options.Client().ApplyURI(config.Conf.MgoUri).SetMaxPoolSize(100)); err == nil {
 			Mongo = &MongoClient{}
 			Mongo.Ctx = ctx
 			Mongo.Client = client

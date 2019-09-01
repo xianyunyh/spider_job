@@ -3,6 +3,8 @@ module app
 go 1.12
 
 require (
+	github.com/gin-contrib/cors v1.3.0 // indirect
+	github.com/gin-contrib/static v0.0.0-20190511124741-c1cdf9c9ec7b // indirect
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
