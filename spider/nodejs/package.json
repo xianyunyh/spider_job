@@ -15,7 +15,7 @@
     "is-empty": "^1.2.0",
     "log4js": "^3.0.6",
     "mongodb": "^3.2.2",
-    "puppeteer": "^1.10.0",
+    "puppeteer": "^1.13.0",
     "random": "^2.1.1",
     "redis": "^2.8.0",
     "sleep-anywhere": "^1.0.0",
