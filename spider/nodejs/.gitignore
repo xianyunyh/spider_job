@@ -2,3 +2,7 @@
 node_modules/
 *.zip
 *.log
+
+.vscode/
+
+dist/
