@@ -10,7 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "dayjs": "^1.8.15",
     "esprima": "^4.0.1",
     "is-empty": "^1.2.0",
