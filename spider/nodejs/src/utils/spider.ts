@@ -1,8 +1,8 @@
-import puppeteer from "puppeteer";
+import puppeteer, { LaunchOptions , ChromeArgOptions , BrowserOptions} from "puppeteer";
 
 class Browser {
   private browser: puppeteer.Browser | undefined;
-  constructor(args: puppeteer.LaunchOptions) {
+  constructor(args: LaunchOptions & ChromeArgOptions & BrowserOptions) {
   }
   async newPage() {
     return await this.browser?.newPage();
@@ -10,7 +10,7 @@ class Browser {
   async close() {
     await this.browser?.close()
   }
-  async create(options: puppeteer.LaunchOptions):Promise<puppeteer.Browser> {
+  async create(options: LaunchOptions & ChromeArgOptions & BrowserOptions):Promise<puppeteer.Browser> {
      options = {
       executablePath: "",
       headless: true,
