@@ -14,7 +14,7 @@
     "dayjs": "^1.10.4",
     "esprima": "^4.0.1",
     "is-empty": "^1.2.0",
-    "log4js": "^6.3.0",
+    "log4js": "^6.4.0",
     "mongodb": "^3.6.4",
     "puppeteer": "^7.1.0",
     "random": "^2.2.0",
