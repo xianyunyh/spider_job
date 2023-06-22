@@ -17,14 +17,16 @@ bash install.sh
 
 ```bash
 npm install  --ignore-scripts #跳过下载chromium
+# 或者
+yarn install --ignore-scripts
 ```
 
 ### 配置
 
-windows用户 安装完node的依赖之后和下载了chromium。然后打 'index.ts'
- 将`executablePath` 改为下载chrome的执行路径chromium
+安装完node的依赖之后和下载了chromium。然后打 'index.ts'
+ 将`executablePath` 改为下载chrome的执行路径chromium,或者自己的chrome或者edge等chromium内核的浏览器
 然后执行 `npx ts-node src/index.ts` 即可
-或者执行`npm run build` 编译ts到js 然后再运行 `node dist/index.js`
+或者先执行`npm run build` 编译ts到js 然后再运行 `node dist/index.js`
 
 如果不需要在前台看到浏览器，那么将`headless`的值改成 `true`
 ```js
