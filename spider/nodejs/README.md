@@ -21,25 +21,19 @@ npm install  --ignore-scripts #跳过下载chromium
 
 ### 配置
 
-windows用户 安装完node的依赖之后和下载了chromium。然后打开`lib/spider.js`
+windows用户 安装完node的依赖之后和下载了chromium。然后打 'index.ts'
  将`executablePath` 改为下载chrome的执行路径chromium
-然后执行 `node src/zhipin.js` 即可
+然后执行 `npx ts-node src/index.ts` 即可
+或者执行`npm run build` 编译ts到js 然后再运行 `node dist/index.js`
 
 如果不需要在前台看到浏览器，那么将`headless`的值改成 `true`
 ```js
-splider.launch = async (option = {}) => {
-  return await puppeteer.launch({
-    executablePath: path.resolve(__dirname,'../chrome-win/chrome.exe'),
+ puppeteer.launch({
+    // 启动无头浏览器
     headless: false,
-    defaultViewport:{
-      width:1440,
-      height:720
-    },
-    timeout:6000,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      ...option
-  });
-};
+    // 浏览器路径
+    executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+  })
 ```
 
 
