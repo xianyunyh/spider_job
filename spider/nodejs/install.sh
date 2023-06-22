@@ -68,20 +68,20 @@ elif [[ "$DISTRO" == "Debian" ]]; then
 fi
 local_chromium_dir=${chromium_dir}"/linux-"${chromium_verison}"/"
 if [[ "$os_name" == "Linux" ]]; then
-    download_url="https://npm.taobao.org/mirrors/chromium-browser-snapshots/Linux_x64/${chromium_verison}/chrome-linux.zip"
+    download_url="https://registry.npmmirror.com/-/binary/chromium-browser-snapshots/Linux_x64/${chromium_verison}/chrome-linux.zip"
 elif [[ "$os_name" == "Darwin" ]]; then
-    download_url="https://npm.taobao.org/mirrors/chromium-browser-snapshots/Mac/${chromium_verison}/chrome-mac.zip"
+    download_url="https://registry.npmmirror.com/-/binary/chromium-browser-snapshots/Mac/${chromium_verison}/chrome-mac.zip"
     local_chromium_dir=${chromium_dir}"/mac-"${chromium_verison}"/"
 fi
 read -p "是否需要自动下载Chromium (1,自动下载,2,手动下载)：" INPUT_STRING
 case $INPUT_STRING in
 	1)
-		npm install --registry https://registry.npm.taobao.org
+		npm install --registry https://registry.npmmirror.com/
 		;;
 	2)
 		echo "正在从 npm.taobao.org 下载 Chromium……"
 		wget -O chrome.zip ${download_url}
-		npm install  --ignore-scripts --registry https://registry.npm.taobao.org
+		npm install  --ignore-scripts --registry https://registry.npmmirror.com/
 		if [[ ! -d ${local_chromium_dir} ]]; then
             mkdir -p ${local_chromium_dir}
         fi

@@ -1,6 +1,6 @@
 import Url from 'url-parse'
 import dayjs from 'dayjs';
-
+import {Page} from 'puppeteer'
 export function getIdByUrl(url: string ): string {
     let uParse = new Url(url)
     let path = uParse.pathname
@@ -42,4 +42,25 @@ export function  parseLaGouTime(t: string) {
         return t
     }
     return ""
+}
+export const  extractItemLinks = (selector: string): Array<string> => {
+    const extractedElements = document.querySelectorAll(selector);
+    let items: Array<string> = [];
+    extractedElements.forEach(element => {
+        items.push(element.getAttribute("href") || '')
+    })
+    return items;
+}
+
+export const getElementText = async (page: Page,selector: string): Promise<string> =>{
+    try {
+        await page.waitForSelector(selector);
+        return await page.$eval(selector, ele => ele.textContent || '');
+    } catch (e) {
+        return "";
+    }
+}
+
+export function sleep(ms: number) {
+    return new Promise(resolve=>setTimeout(resolve, ms))
 }

@@ -1,30 +1,23 @@
-import puppeteer, { LaunchOptions , ChromeArgOptions , BrowserOptions} from "puppeteer";
-
-class Browser {
-  private browser: puppeteer.Browser | undefined;
-  constructor(args: LaunchOptions & ChromeArgOptions & BrowserOptions) {
-  }
-  async newPage() {
-    return await this.browser?.newPage();
-  }
-  async close() {
-    await this.browser?.close()
-  }
-  async create(options: LaunchOptions & ChromeArgOptions & BrowserOptions):Promise<puppeteer.Browser> {
-     options = {
-      executablePath: "",
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      defaultViewport: {
-        width: 1440,
-        height: 720,
-      },
-      timeout: 60000,
-      ...options,
+import { Page, EvaluateFunc } from "puppeteer";
+export class Spider {
+    protected page: Page
+    constructor(page: Page) {
+        this.page = page
     }
-    const browser = await puppeteer.launch(options)
-    this.browser = browser;
-    return browser;
-  }
+    async getElementText(selector: string): Promise<string> {
+        try {
+            await this.page.waitForSelector(selector);
+            return await this.page.$eval(selector, ele => ele.textContent || '');
+        } catch (e) {
+            return "";
+        }
+    }
+    extractItemLinks(selector: string): Array<string> {
+        const extractedElements = document.querySelectorAll(selector);
+        let items: Array<string> = [];
+        extractedElements.forEach(element => {
+            items.push(element.getAttribute("href") || '')
+        })
+        return items;
+    }
 }
-export default Browser
