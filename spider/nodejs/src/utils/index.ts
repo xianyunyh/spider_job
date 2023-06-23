@@ -54,9 +54,10 @@ export const  extractItemLinks = (selector: string): Array<string> => {
 
 export const getElementText = async (page: Page,selector: string): Promise<string> =>{
     try {
-        await page.waitForSelector(selector);
+        await page.waitForSelector(selector,{timeout:3000});
         return await page.$eval(selector, ele => ele.textContent || '');
     } catch (e) {
+        console.log(`selector:${selector} error`)
         return "";
     }
 }

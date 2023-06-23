@@ -11,11 +11,6 @@ puppeteer
   })
   .then(async browser => {
     const page = await browser.newPage()
-    const conf = {
-      start_url: "https://www.zhipin.com/web/geek/job",
-      city_code: "101020100",
-      position: "100103",
-    }
-    await zhipin.run(page, conf);
+    await zhipin.run(page, "https://www.zhipin.com/c101020100-p100103/");
     await browser.close()
   }).catch(e => console.log(e))
