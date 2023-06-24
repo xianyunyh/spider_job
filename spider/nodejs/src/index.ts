@@ -5,7 +5,7 @@ puppeteer
   .use(StealthPlugin())
   .launch({
     // 启动无头浏览器
-    headless: false,
+    headless: 'new',
     // 浏览器路径
     executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
   })

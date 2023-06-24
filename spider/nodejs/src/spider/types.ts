@@ -17,15 +17,16 @@ export interface CompanyInfo {
 
 }
 export interface JobItem {
+    job_id: string,
+    job_name: string,
+    educational: string,
+    experience: string,//工作经验
+    area?: string,
     address: string;
+    body: string,
+    skill?: Array<string>
     create_time: string;
     salary: Salary,
-    body: string,
-    company_name: string,
-    postion_id: string,
-    position_name: string,
-    educational: string,
-    work_year: string,
-    from_site ?: string,
-    company_info: CompanyInfo
+    site ?: string,
+    company: CompanyInfo
 }

@@ -1,8 +1,10 @@
 import { Page } from 'puppeteer'
 import type { JobItem, Salary } from './types'
 import { extractItemLinks, getIdByUrl, getElementText,sleep} from '../utils'
+import { postJob } from '../store/job'
 import XLSX from 'xlsx'
 import dayjs from 'dayjs'
+
 let total = 0;
 export const run = async (page: Page, url: string) => {
     await page.goto(url, { timeout: 30000, waitUntil: "domcontentloaded" })
@@ -33,13 +35,11 @@ export const run = async (page: Page, url: string) => {
         const ele = `.options-pages a:nth-child(${i+1})`
         await page.waitForSelector(ele)
         await page.click(ele)
-        // await page.goBack()
         await page.waitForSelector(".job-list-box .job-card-left",{timeout: 10000})
         let temp = await page.evaluate(extractItemLinks, ".job-list-box .job-card-left") as Array<string>;
         items = [...items,...temp]
         await sleep(5000)
     }
-    // page.browser().target().
     console.log(jobs.length)
     console.log("page load end")
 
@@ -48,11 +48,16 @@ export const run = async (page: Page, url: string) => {
         if (!res) {
             continue;
         }
+        await postJob(res)
         results.push(res)
         console.log(res)
     }
+}
+
+function writeXlsx(results: Array<JobItem>) {
+    console.log("total:", results.length)
     const rows = results.map((item) => {
-        const company_info = item.company_info
+        const company_info = item.company
         const salary = item.salary
         return {
             ...item,
@@ -66,7 +71,6 @@ export const run = async (page: Page, url: string) => {
     let date = dayjs().format("YYYY-MM-DD")
     const filename = `zhipin_${date}.xlsx`
     XLSX.writeFile(workbook,filename, { compression: true });
-    console.log("total:", results.length)
 }
 
 const gotoDetail = async (page: Page, url: string): Promise<JobItem | false> => {
@@ -120,17 +124,16 @@ const gotoDetail = async (page: Page, url: string): Promise<JobItem | false> => 
             position_lat: maps[1],
         }
         return {
+            job_id: postion_id,
+            job_name: position_name,
+            experience: work_year,
+            educational,
             address,
             salary: salarys,
             create_time,
             body,
-            company_name,
-            postion_id,
-            position_name,
-            educational,
-            work_year,
-            from_site: "ZhiPin",
-            company_info
+            site: "ZhiPin",
+            company: company_info
         }
 
     } catch (error) {
