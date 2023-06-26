@@ -27,7 +27,7 @@ export const run = async (page: Page, url: string) => {
     })
     // @ts-ignore
     let results: Array<JobItem> = []
-    await page.waitForSelector(".options-pages a",{timeout: 10000})
+    await page.waitForSelector(".options-pages a",{timeout: 30000})
     const pageBtns = await page.$$(".options-pages a")
     console.log(total)
     let items: Array<string> = []
