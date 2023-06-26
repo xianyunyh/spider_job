@@ -1,14 +1,15 @@
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import zhipin from './spider/zhipin'
-puppeteer
-  .use(StealthPlugin())
-  .launch({
-    // 启动无头浏览器
-    headless: false,
-    // 浏览器路径
-    executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-  })
+import { PuppeteerLaunchOptions } from 'puppeteer'
+import logger from './utils/log'
+const options: PuppeteerLaunchOptions  = {
+  // 启动无头浏览器
+  headless: 'new',
+  // 浏览器路径
+  executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+}
+puppeteer.use(StealthPlugin()).launch(options)
   .then(async browser => {
     const page = await browser.newPage()
     try {
@@ -16,7 +17,7 @@ puppeteer
       await browser.close()
     }
     catch(e){
-      console.log(e,page.url())
+      logger.error(`load page error ${page.url()} error:${e}`)
     }finally{
       await browser.close()
     }

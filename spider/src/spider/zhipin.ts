@@ -2,22 +2,20 @@ import { Page } from 'puppeteer'
 import type { JobItem, Salary } from './types'
 import { extractItemLinks, getIdByUrl, getElementText,sleep} from '../utils'
 import { postJob } from '../store/job'
-import XLSX from 'xlsx'
-import dayjs from 'dayjs'
-
+import logger from '../utils/log';
 let total = 0;
 export const run = async (page: Page, url: string) => {
     await page.goto(url, { timeout: 30000, waitUntil: "domcontentloaded" })
     const resp = await page.goto(url)
+    logger.debug(page.url())
     if (!resp) {
-        console.error("error:")
+        logger.error(`${page.url()} load failed`)
         return
     }
-    console.log(resp.statusText())
     let jobs: Array<any> = []
     page.on('response',async (resp)=>{
         if (resp.url().includes('search/joblist.json')) {
-            console.log(resp.url())
+            logger.debug(resp.url())
             let data = await resp.json();
             const {code,zpData} = data;
             total = zpData.resCount
@@ -29,7 +27,6 @@ export const run = async (page: Page, url: string) => {
     let results: Array<JobItem> = []
     await page.waitForSelector(".options-pages a",{timeout: 30000})
     const pageBtns = await page.$$(".options-pages a")
-    console.log(total)
     let items: Array<string> = []
     for (let i = 0;i< pageBtns.length;i++) {
         const ele = `.options-pages a:nth-child(${i+1})`
@@ -40,7 +37,6 @@ export const run = async (page: Page, url: string) => {
         items = [...items,...temp]
         await sleep(5000)
     }
-    console.log(jobs.length)
     console.log("page load end")
 
     for (let i =0;i< jobs.length;i++) {
@@ -50,34 +46,14 @@ export const run = async (page: Page, url: string) => {
         }
         await postJob(res)
         results.push(res)
-        console.log(res)
+        logger.debug(res)
     }
-}
-
-function writeXlsx(results: Array<JobItem>) {
-    console.log("total:", results.length)
-    const rows = results.map((item) => {
-        const company_info = item.company
-        const salary = item.salary
-        return {
-            ...item,
-            salary: `${salary.min}-${salary.max}`,
-            ...company_info
-        }
-    })
-    const worksheet = XLSX.utils.json_to_sheet(rows);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
-    let date = dayjs().format("YYYY-MM-DD")
-    const filename = `zhipin_${date}.xlsx`
-    XLSX.writeFile(workbook,filename, { compression: true });
 }
 
 const gotoDetail = async (page: Page, url: string): Promise<JobItem | false> => {
     try {
         await page.goto(url,{timeout: 30000,waitUntil:'domcontentloaded'})
         await page.waitForSelector("h1")
-        
         const postion_id = getIdByUrl(url)
         let title = await getElementText(page, "h1")
         let salary: string = await getElementText(page, ".info-primary .salary")
@@ -137,15 +113,15 @@ const gotoDetail = async (page: Page, url: string): Promise<JobItem | false> => 
         }
 
     } catch (error) {
-        console.log(error)
+        logger.error(error)
         return false
     }
 }
 const gotoJob =async (page: Page, row:any) => {
-    console.log(row)
+    logger.info(row)
     const { securityId,encryptJobId,lid } = row
     const detailUrl = `https://www.zhipin.com/job_detail/${encryptJobId}.html?lid=${lid}&securityId=${securityId}&sessionId=`
-    console.log(detailUrl)
+    logger.debug(detailUrl)
     return await gotoDetail(page, detailUrl)
 }
 const parseSalary = (salary: string): Salary => {
