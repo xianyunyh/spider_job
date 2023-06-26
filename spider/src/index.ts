@@ -3,6 +3,9 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import zhipin from './spider/zhipin'
 import { PuppeteerLaunchOptions } from 'puppeteer'
 import logger from './utils/log'
+logger.info("111")
+
+
 const options: PuppeteerLaunchOptions  = {
   // 启动无头浏览器
   headless: 'new',
