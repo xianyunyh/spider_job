@@ -1,0 +1,8 @@
+# /node_modules/* and /bower_components/* in the project root are ignored by default
+
+# Ignore other node_modules
+node_modules/*
+
+# Ignore built files except build/index.js
+build/*
+dist/*

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta charset="UTF-8">
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+  <title>招聘网站七日内发布岗位数</title>
+</head>
+
+<body>
+    <%- include('header'); %>
+    <!-- 主题内容 -->
+
+    <div class="container">
+      <div id="main" style="height:400px;"></div>
+    </div>
+    <!-- 主题结束 -->
+
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.common.min.js"></script>
+    <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
+
+      $(function () {
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+          title: {
+            text: '招聘网站七日内发布岗位数趋势'
+          },
+          tooltip: {
+            trigger: 'axis',
+            formatter: '{b0}发布{c0}个职位'
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+
+        };
+        myChart.setOption(option);
+        myChart.showLoading();
+        $.get('http://yehe.37he.cn/api/weekdayline.php')
+          .done(function (data) {
+            myChart.hideLoading();
+            data = JSON.parse(data)
+            myChart.setOption(deal_data(data));
+          });
+
+      })
+
+      function deal_data(data) {
+        var xAxisData = []
+        var seriesData = []
+        console.log(data)
+        data.forEach(function (item, index) {
+          xAxisData.push(item['date'])
+          seriesData.push(item['count'])
+        })
+        var option = {
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: xAxisData
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              type: 'line',
+              stack: '总量',
+              data: seriesData
+            }
+          ]
+        }
+        return option
+      }
+    </script>
+</body>
+
+</html>

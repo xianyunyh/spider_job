@@ -1,0 +1,46 @@
+<header class="navbar navbar-inverse navbar-static-top bs-docs-nav" id="top">
+    <div class="container">
+        <div class="navbar-header">
+            <button aria-controls="bs-navbar" aria-expanded="false" class="navbar-toggle collapsed"
+                data-target="#bs-navbar" data-toggle="collapse" type="button">
+                <span class="sr-only">
+                </span>
+                <span class="icon-bar">
+                </span>
+                <span class="icon-bar">
+                </span>
+                <span class="icon-bar">
+                </span>
+            </button>
+        </div>
+        <nav class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/job/weekline">
+                        一周职位统计
+                    </a>
+                </li>
+                <li class="<%= group=='experience' ? 'active': '' %>">
+                    <a href="/job/analytic/experience">
+                        工作年限统计
+                    </a>
+                </li>
+                <li>
+                    <a href="/job/company">
+                        热门公司统计
+                    </a>
+                </li>
+                <li class=" <%= group=='educational' ? 'active': '' %>">
+                    <a href="/job/analytic/educational">
+                        学历分析
+                    </a>
+                </li>
+                <li>
+                    <a href="word.html">
+                        词云图
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

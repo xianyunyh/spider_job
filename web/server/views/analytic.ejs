@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta charset="utf-8">
+            <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+                <title>
+                    <%= title %>
+                </title>
+            </link>
+        </meta>
+    </head>
+    <body>
+        <%- include('header'); %>
+        <!-- 主题内容 -->
+        <div class="container">
+            <div id="main" style="height:400px;">
+            </div>
+            <div id="salary" style="height: 400px"></div>
+        </div>
+        <!-- 主题结束 -->
+        <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js">
+        </script>
+        <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js">
+        </script>
+        <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.common.min.js">
+        </script>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var salaryChart = echarts.init(document.getElementById('salary'));
+        // 指定图表的配置项和数据
+        var salaryOption  = {
+            title : {
+                text: '各学历平均阶段平均薪资情况',
+                subtext: '数据来源BOSS直聘',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: function (params) {
+                    var res='<div><p>'+params['name'] +"平均薪资:"+ params['value'].toFixed(2)+'元</p>'
+
+                    return res;
+                },
+            },
+            xAxis: {
+                type: 'category',
+                data: []
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [],
+                type: 'bar',
+
+            }]
+        };
+        const title = "<%= title %>"
+        const group = "<%= groupText %>"
+        let field = '<%= group %>'
+        let  data = '<%- JSON.stringify(data) %>'
+        data = JSON.parse(data)
+        salaryChart.setOption(salaryOption)
+        var option = {
+            legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: []
+                },
+                series : [
+                    {
+                        name: group,
+                        type: 'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data:[],
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }],
+            title : {
+                text: title,
+                subtext: '数据来源BOSS直聘',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c}个 ({d}%)"
+            }
+        };
+
+        myChart.setOption(option);
+        myChart.showLoading();
+        result = deal_workyear(data)
+        option.legend.data = result.legend
+        option.series[0].data = result.series
+        salaryOption.xAxis.data = result.legend
+        salaryOption.series[0].data = result.salarySeries
+        myChart.setOption(option);
+        salaryChart.setOption(salaryOption)
+        myChart.hideLoading();
+        function deal_workyear(data) {
+            var legend = []
+            var series = []
+            var salarySeries =[]
+            data.forEach(function(item,index){
+                legend.push(item['group'])
+                var temp = {}
+                temp.name = item['group']
+                temp.value = item['count']
+                series.push(temp)
+                salarySeries.push(item['salary'])
+            })
+
+            return {legend,series,salarySeries}
+        }
+        </script>
+    </body>
+</html>
